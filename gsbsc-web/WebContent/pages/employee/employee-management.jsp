@@ -126,7 +126,7 @@ function ${programId}_page_message() {
     			<br/>
     			<gs:textBox name="BSC_PROG001D0001Q_empId" id="BSC_PROG001D0001Q_empId" value="" width="100" maxlength="10"></gs:textBox>
 				<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG001D0001Q_empId'">
-    				Nhập mã số của nhân viên.
+    				Nhập mã số của nhân viên
 				</div>
     		</td>
     		<td height="50px" width="50%"  align="left">
@@ -134,7 +134,7 @@ function ${programId}_page_message() {
     			<br/>
     			<gs:textBox name="BSC_PROG001D0001Q_fullName" id="BSC_PROG001D0001Q_fullName" value="" width="200" maxlength="100"></gs:textBox>
 				<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG001D0001Q_fullName'">
-    				Nhập tên.
+    				Nhập tên
 				</div>
     		</td>
     	</tr>
