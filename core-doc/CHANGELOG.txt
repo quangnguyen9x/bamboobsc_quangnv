@@ -1,0 +1,264 @@
+0.7.2p1
+-----------------------------------------------------------
+1. Bug for export SVG chart
+
+issues please reference:
+https://github.com/billchen198318/bamboobsc/issues/49
+
+
+0.7.2
+-----------------------------------------------------------
+1. Change DOJO RichEditor( vision content / template editor ) replace to Froala WYSIWYG Editor.
+2. Menu settings/ Role & Authority settings config item MultiSelect change table list checkBox.
+3. Report and dashboard update ( 01 - BSC/KPI Report, 04 - Perspectives Dashboard, 05 - Objectives Dashboard, 06 - KPIs Dashboard, 09 - Dashboard)
+4. Bug fix, Query grid page change page select value. Log query form groovy expression bug.
+
+issues please reference:
+https://github.com/billchen198318/bamboobsc/issues/47
+
+
+0.7.1p1
+-----------------------------------------------------------
+1. Bug Fix create new employee but no hierarchy data.
+2. Upgrade DOJO javascript framework 1.12.1 to 1.12.2 .
+3. The VM(VirtualBox) version will not be released for ver 0.7.1p1 and later. 
+4. The bambooBSC 0.7.1p1 need JAVA8 must "2G Free RAM for JVM" start tomcat8, so maybe computer need has 4G or bigger RAM size.
+
+issues please reference:
+https://github.com/billchen198318/bamboobsc/issues/45
+
+
+0.7.1
+-----------------------------------------------------------
+1. Employee/Organization hierarchy and Hierarchy view support for BSC-KPI/Department/Personal report.
+2. Streamlined the KPI aggregate method expression content.
+3. Time Series Analysis.
+
+New features please reference:
+https://github.com/billchen198318/bamboobsc/issues/39
+
+If have previous database data (bbcore) in MYSQL E.g: 0.7.0 old version, please update sql command file patch_up_071R.sql
+NOTE: upgrade will lose some system data. recommend need "backup old database".
+
+
+0.7.0
+-----------------------------------------------------------
+1. New dashboards features "09-Dashboards".
+2. Monitor score-performance JOB schedule (06 - Expression Job) expression (BSC_JOB_EXPR001 ~ BSC_JOB_EXPR006) for Vision、Strategy of objectives、KPI.
+3. Workspace upgrade, improve response speed for workspace component.
+4. Add API ( SOAP / REST ) API for get Scorecard.
+5. MOBILE version upgrade.
+6. Strategy-MAP add dbclick event show item dashboards ( only Default-WEB version, mobile version no support ).
+7. Formula and aggregation method and system expression add support R-language option expression.
+8. Add example expression( BSC_JOB_EXPR801 ) do send notice mail JOB schedule for monitor item score history data.
+9. Some third-party library file upgrade.
+
+
+If have previous database data in MYSQL(bbcore) E.g: 0.6.6 or 0.7.0-BETA1 old version, please update sql command file patch_up_070R.sql
+NOTE: upgrade will lose some system data.recommend need "backup old database".
+
+New features please reference:
+https://github.com/billchen198318/bamboobsc/issues/33
+
+API for get Scorecard please reference:
+https://github.com/billchen198318/bamboobsc/blob/master/core-doc/dev-docs/16-API.md
+
+
+0.6.6
+-----------------------------------------------------------
+1. Add system and program item multi name support, need self use
+   "01 - Application site multi name (Create)" or "02 - Program registration multi name (Create)" to management name.
+   
+   reference: 
+   https://github.com/billchen198318/bamboobsc/issues/30
+   
+2. Add KPI report some label name modify (01 - Report property).
+3. Fix BUG, KPI report export PNG image file mode cannot show all body.
+4. Some modifications
+5. If have previous data in MYSQL(bbcore) E.g: 0.6.5 or 0.6.4 old version, please update sql command file patch_065_up_066.sql
+
+
+0.6.5.1
+-----------------------------------------------------------
+1. Add input-field notice message label for Create/Edit page.
+2. Some modifications
+3. If have previous data in MYSQL(bbcore) E.g: 0.6.5 old version, please update sql command file patch_0650_up_0651.sql
+
+
+0.6.5
+-----------------------------------------------------------
+1. Some modifications
+
+
+0.6.4
+-----------------------------------------------------------
+1. Fix Personal BSC report score always zero bug.
+2. Support auto config host:port every when start tomcat-server(bambooBSC) on DHCP daymanic IP environment. ( old version only first one start tomcat-server-bambooBSC will config )
+   for manual install mode version:
+   config base.applicationSiteHostUpdateMode=2
+   reference: https://github.com/billchen198318/bamboobsc/issues/24 
+3. Some modifications
+
+
+0.6.3.1
+-----------------------------------------------------------
+1. Fix core.css patch flat-themes-1.11.1
+2. Add BR - Brazil locale, language support by Giacomozzi( https://github.com/giacomozzi ) 
+   https://github.com/billchen198318/bamboobsc/issues/8
+
+
+0.6.3
+-----------------------------------------------------------
+1. Support locale ( IT - Italy , PT - Portugal, RU - Russia ).
+2. PDCA features.
+   reference: https://github.com/billchen198318/bamboobsc/issues/14
+3. KPI inactive options.
+   reference: https://github.com/billchen198318/bamboobsc/issues/14
+4. Measure-data target / actual field input bug fix.
+   reference: https://github.com/billchen198318/bamboobsc/issues/16
+5. Some modifications
+6. *** please re-import bbcore.sql to MySQL *** 
+   If have previous data in MYSQL(bbcore) E.g: 0.6.2 old version, 
+   but did not re-import the SQL file to MYSQL(bbcore), the 0.6.3 version program will not work done.
+
+
+0.6.2
+-----------------------------------------------------------
+1. Change page themes to flat style.
+2. Add 07 - KPIs trends report(BSC_PROG003D0007Q) for default user role's menu-item. ( 0.6.1 SQL dump forget to add ) 
+3. Support configuration option to disable/enable captcha code on Login page. 0.6.2 default is disable captcha code. 
+   reference: https://github.com/billchen198318/bamboobsc/issues/5
+4. Support KPI attached files(document) for information/verification document.
+   reference: https://github.com/billchen198318/bamboobsc/issues/6
+5. Strategy Map add Print button, because export image cannot show line, this is compromise solution.
+   reference: https://github.com/billchen198318/bamboobsc/issues/12
+6. Support LDAP login mode.
+   reference: https://github.com/billchen198318/bamboobsc/issues/13
+7. Some modifications
+8. *** please re-import bbcore.sql to MySQL *** 
+   If have previous data in MYSQL(bbcore) E.g: 0.6.1 old version, 
+   but did not re-import the SQL file to MYSQL(bbcore), the 0.6.2 version program will not work done.
+
+
+0.6.1
+-----------------------------------------------------------
+1. Add new feature 07 - KPI Period Trends (https://github.com/billchen198318/bamboobsc/issues/3)
+2. Some modifications
+3. *** please re-import bbcore.sql to MySQL ***
+
+
+0.6.00
+-----------------------------------------------------------
+1. Add 360 Employee degree feedback project.
+2. Some modifications
+
+
+2015-09-01
+-----------------------------------------------------------
+1. Update BSC-strategy-map used jsPlumb-LIB to new version.
+2. Add lost password command line tools.
+3. Some modifications
+
+
+2015-08-10
+-----------------------------------------------------------
+1. Add "Max" field for KPI / KPI-Report / Personal-Report / Department-Report.
+2. *** please re-import bbcore.sql to MySQL ***
+
+
+2015-07-27
+-----------------------------------------------------------
+1. Add KPI-Report status icon and some modifications.
+2. *** please re-import bbcore.sql to MySQL ***
+
+
+2015-07-01
+-----------------------------------------------------------
+Add mobile version web, query scorecard for a mobile-device's browser.
+
+
+2015-06-15
+-----------------------------------------------------------
+Some modifications and add locale language support.
+locale language support:
+		CN - Simplified Chinese
+		DE - Deutsch
+		EN - English
+		ES - español
+		FR - Français
+		JA - Japan ,
+		TW - Traditional Chinese
+
+
+2015-05-26
+-----------------------------------------------------------
+Some modifications and database tables.
+add import/export csv file for Vision, Perspectives, strategy-objectives, KPIs, measure-data.
+
+
+2015-05-07
+-----------------------------------------------------------
+Some modifications
+
+
+2015-05-01
+-----------------------------------------------------------
+Some modifications
+
+
+2015-04-08
+-----------------------------------------------------------
+add new feature 
+	"04 - Perspectives Dashboard" 
+	"05 - Objectives Dashboard"
+	"06 - KPIs Dashboard"
+
+
+2015-03-27
+-----------------------------------------------------------
+Some modifications
+
+add new database table:
+	bb_report_role_view
+	
+*** please re-import bbcore.sql to MySQL
+
+
+2015-03-20
+-----------------------------------------------------------
+Some modifications
+
+
+2015-03-12
+-----------------------------------------------------------
+add new feature analytics(OLAP) on QCHARTS-WEB
+and modify KPI calculation(aggregation method) .
+
+add new database table:
+	bb_aggregation_method
+	qc_olap_conf
+	qc_olap_catalog
+	qc_olap_mdx
+	
+modifier to the database table:
+	bb_kpi.CAL VARCHAR(1) to VARCHAR(14)
+	and bb_kpi.CAL related-to bb_aggregation_method.AGGR_ID
+	
+*** please re-import bbcore.sql to MySQL
+
+
+2015-02-16
+-----------------------------------------------------------
+add KPI-Report/Personal-Report/Department-Report signature function
+
+
+2015-02-12
+-----------------------------------------------------------
+fix some login error, the same account login on another devices
+and modify tb_sys_usess UK_1(SESSION_ID, ACCOUNT) 
+
+
+2015-02-11
+-----------------------------------------------------------
+fix "05 - Measure data" T(Target value), A(Actual value) cannot input float number value.
+

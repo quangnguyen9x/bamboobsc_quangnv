@@ -1,0 +1,142 @@
+Avg:
+=================================================================================
+import com.netsteadfast.greenstep.bsc.util.*;
+
+score = AggregationMethod.build().average(kpi);
+
+
+import com.netsteadfast.greenstep.bsc.util.*;
+
+AggregationMethod.build().averageDateRange(kpi, frequency);
+
+
+
+=================================================================================
+
+
+
+
+Avg Dist:
+=================================================================================
+import com.netsteadfast.greenstep.bsc.util.*;
+
+score = AggregationMethod.build().averageDistinct(kpi);
+
+
+import com.netsteadfast.greenstep.bsc.util.*;
+
+AggregationMethod.build().averageDistinctDateRange(kpi, frequency);
+
+
+=================================================================================
+
+
+
+
+Count:
+=================================================================================
+
+import com.netsteadfast.greenstep.bsc.util.*;
+
+score = AggregationMethod.build().count(kpi);
+
+
+
+import com.netsteadfast.greenstep.bsc.util.*;
+
+AggregationMethod.build().countDateRange(kpi, frequency);
+
+=================================================================================
+
+
+
+
+Count dist :
+=================================================================================
+
+import com.netsteadfast.greenstep.bsc.util.*;
+
+score = AggregationMethod.build().countDistinct(kpi);
+
+
+
+import com.netsteadfast.greenstep.bsc.util.*;
+
+AggregationMethod.build().countDistinctDateRange(kpi, frequency);
+
+=================================================================================
+
+
+
+
+Max:
+=================================================================================
+
+import com.netsteadfast.greenstep.bsc.util.*;
+
+score = AggregationMethod.build().max(kpi);
+
+
+
+import com.netsteadfast.greenstep.bsc.util.*;
+
+AggregationMethod.build().maxDateRange(kpi, frequency);
+
+=================================================================================
+
+
+
+
+
+Min:
+=================================================================================
+
+import com.netsteadfast.greenstep.bsc.util.*;
+
+score = AggregationMethod.build().min(kpi);
+
+
+
+import com.netsteadfast.greenstep.bsc.util.*;
+
+AggregationMethod.build().minDateRange(kpi, frequency);
+
+=================================================================================
+
+
+
+
+Sum:
+=================================================================================
+
+import com.netsteadfast.greenstep.bsc.util.*;
+
+score = AggregationMethod.build().sum(kpi);
+
+
+
+import com.netsteadfast.greenstep.bsc.util.*;
+
+AggregationMethod.build().sumDateRange(kpi, frequency);
+
+=================================================================================
+
+
+
+
+Sum Dist:
+=================================================================================
+
+import com.netsteadfast.greenstep.bsc.util.*;
+
+score = AggregationMethod.build().sumDistinct(kpi);
+
+
+
+import com.netsteadfast.greenstep.bsc.util.*;
+
+AggregationMethod.build().sumDistinctDateRange(kpi, frequency);
+
+=================================================================================
+
+
