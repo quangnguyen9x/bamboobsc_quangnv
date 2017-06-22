@@ -107,7 +107,7 @@ function submitLoginForm() {
     <!-- 2015-12-18 add https://github.com/billchen198318/bamboobsc/issues/5 -->
     <s:if test=" \"Y\" == loginCaptchaCodeEnable ">        
     <div class="form-group">
-          <label for="captcha">Captcha code <img src="./kaptcha.jpg?n=<%=System.currentTimeMillis()%>"/></label>
+          <label for="captcha">Mã xác thực <img src="./kaptcha.jpg?n=<%=System.currentTimeMillis()%>"/></label>
           <input class="form-control" type="text" id="captcha" name="captcha">
     </div>       
     </s:if>
@@ -129,11 +129,6 @@ function submitLoginForm() {
     <button type="button" class="btn btn-lg btn-primary btn-block" name="btnSubmit" onclick="submitLoginForm()">${action.getText('LOGIN_btnLogin')}</button>
    
     <br/>
-    <label>Please use <b>Chrome</b> (recommend) or <b>Firefox</b> browser, can not support other browser.</label>
-    <br/>
-    <label>bambooBSC 0.7.2p1 version</label>
-	
-	<a href="../gsbsc-mobile-web/index.action" class="btn btn-success" role="button" aria-pressed="true">click link to Mobile version</a>
 	
 </form>
 </div>
