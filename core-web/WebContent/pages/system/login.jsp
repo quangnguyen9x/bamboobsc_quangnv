@@ -72,7 +72,7 @@ function submitLoginForm() {
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="mySmallModalLabel">Vui Lòng Đợi</h4>
+        <h4 class="modal-title" id="mySmallModalLabel">Vui Lòng Đợi!</h4>
       </div>
       <div class="modal-body">
         <img alt="loading" src="./patch_flat_themes_1_11_icons/loadingAnimation.gif" border="0">
