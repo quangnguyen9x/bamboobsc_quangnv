@@ -40,10 +40,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</div>								
 									
 				&nbsp;&nbsp;
-				<a href="#" title="logout, end session." alt="logout, end session." onClick='confirmDialog("logoutDialogId000", "${action.getText('IndexAction_logoutTitle')}", "${action.getText('IndexAction_logoutMsg')}", logoutEvent, (window.event ? window.event : null) ); return false;'><img src="./images/logout.png" alt="logoOut" border="0" style="vertical-align: middle;" /></a>
+				<a href="#" title="" alt="logout, end session." onClick='confirmDialog("logoutDialogId000", "${action.getText('IndexAction_logoutTitle')}", "${action.getText('IndexAction_logoutMsg')}", logoutEvent, (window.event ? window.event : null) ); return false;'><img src="./images/logout.png" alt="logoOut" border="0" style="vertical-align: middle;" /></a>
 				
 				&nbsp;&nbsp;
-				<font size='2' color="#394045">${verMsg}</font>			
+				<font size='2' color="#394045">VNPT Nam Định</font>			
 				
 			</td>
 
