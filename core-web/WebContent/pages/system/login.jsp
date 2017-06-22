@@ -72,7 +72,7 @@ function submitLoginForm() {
   <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="mySmallModalLabel">Please wait!</h4>
+        <h4 class="modal-title" id="mySmallModalLabel">Vui Lòng Đợi</h4>
       </div>
       <div class="modal-body">
         <img alt="loading" src="./patch_flat_themes_1_11_icons/loadingAnimation.gif" border="0">
@@ -85,7 +85,7 @@ function submitLoginForm() {
 <div class="container">   
 <form class="form-signin" name="loginForm" id="loginForm" action="./login.action" method="post">
 
-    <div><img src="./images/original.jpg" width="220" height="30" /></div>
+    <div><img src="./images/original.jpg" width="270" height="" /></div>
    
     <br/>
    
@@ -107,7 +107,7 @@ function submitLoginForm() {
     <!-- 2015-12-18 add https://github.com/billchen198318/bamboobsc/issues/5 -->
     <s:if test=" \"Y\" == loginCaptchaCodeEnable ">        
     <div class="form-group">
-          <label for="captcha">Mã xác thực <img src="./kaptcha.jpg?n=<%=System.currentTimeMillis()%>"/></label>
+          <label for="captcha">Captcha code <img src="./kaptcha.jpg?n=<%=System.currentTimeMillis()%>"/></label>
           <input class="form-control" type="text" id="captcha" name="captcha">
     </div>       
     </s:if>
@@ -127,9 +127,14 @@ function submitLoginForm() {
     </s:if>   
    
     <button type="button" class="btn btn-lg btn-primary btn-block" name="btnSubmit" onclick="submitLoginForm()">${action.getText('LOGIN_btnLogin')}</button>
-   
+   	<!--  
     <br/>
+    <label>Please use <b>Chrome</b> (recommend) or <b>Firefox</b> browser, can not support other browser.</label>
+    <br/>
+    <label>bambooBSC 0.7.1p1 version</label>
 	
+	<a href="../gsbsc-mobile-web/index.action" class="btn btn-success" role="button" aria-pressed="true">click link to Mobile version</a>
+	 -->
 </form>
 </div>
 

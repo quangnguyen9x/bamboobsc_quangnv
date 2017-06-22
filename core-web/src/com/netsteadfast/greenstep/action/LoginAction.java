@@ -53,12 +53,12 @@ public class LoginAction extends BaseSupportAction {
 		Object errObj = super.getHttpServletRequest().getAttribute(
 				org.apache.shiro.web.filter.authc.FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
 		if ("com.netsteadfast.greenstep.sys.IncorrectCaptchaException".equals(errObj)) {
-			this.setPageMessage("Captcha code incorrect.");
+			this.setPageMessage("Mã Xác Thực Không Đúng");
 		}		
 		if ("org.apache.shiro.authc.IncorrectCredentialsException".equals(errObj)
 				|| "org.apache.shiro.authc.UnknownAccountException".equals(errObj)
 				|| "org.apache.shiro.authc.AuthenticationException".equals(errObj)) {
-			this.setPageMessage("Login fail.");
+			this.setPageMessage("Đăng Nhập Lỗi");
 		}
 	}
 	
