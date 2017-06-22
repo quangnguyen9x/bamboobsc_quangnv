@@ -88,13 +88,13 @@ function ${programId}_page_message() {
 				<br/>
 				<gs:textBox name="BSC_PROG002D0001A_title" id="BSC_PROG002D0001A_title" value="" width="400" maxlength="100"></gs:textBox>
 				<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG002D0001A_title'">
-    				Input title.
+    				Nhập tiêu đề.
 				</div> 				
 			</td>
 		</tr>	
 		<tr>
 			<td height="375px" width="100%"  align="left">
-				<gs:label text="${action.getText('BSC_PROG002D0001A_content')}" id="BSC_PROG002D0001A_content" requiredFlag="Y"></gs:label>&nbsp;<font size="2">( recommend content should not exceed A4 paper size )</font>
+				<gs:label text="${action.getText('BSC_PROG002D0001A_content')}" id="BSC_PROG002D0001A_content" requiredFlag="Y"></gs:label>&nbsp;<font size="2">( Đề nghị nội dung không nên vượt quá kích thước giấy A4 )</font>
 				<gs:inputfieldNoticeMsgLabel id="BSC_PROG002D0001A_content"></gs:inputfieldNoticeMsgLabel>
 				<br/>
 				<!-- 

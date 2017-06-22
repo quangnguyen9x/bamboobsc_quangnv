@@ -87,7 +87,7 @@ function ${programId}_page_message() {
 				<br/>
 				<gs:textBox name="BSC_PROG002D0001E_visId" id="BSC_PROG002D0001E_visId" value="vision.visId" width="200" maxlength="14" readonly="Y"></gs:textBox>
 				<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG002D0001E_visId'">
-    				Id. ( read only )
+    				ID. ( chỉ đọc )
 				</div> 					
 			</td>
 		</tr>	
@@ -98,13 +98,13 @@ function ${programId}_page_message() {
 				<br/>
 				<gs:textBox name="BSC_PROG002D0001E_title" id="BSC_PROG002D0001E_title" value="vision.title" width="400" maxlength="100"></gs:textBox>
 				<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG002D0001E_title'">
-    				Input title.
+    				Nhập tiêu đề.
 				</div> 						
 			</td>
 		</tr>	    	
 		<tr>
 			<td height="375px" width="100%"  align="left">
-				<gs:label text="${action.getText('BSC_PROG002D0001E_content')}" id="BSC_PROG002D0001E_content" requiredFlag="Y"></gs:label>&nbsp;<font size="2">( recommend content should not exceed A4 paper size )</font>
+				<gs:label text="${action.getText('BSC_PROG002D0001E_content')}" id="BSC_PROG002D0001E_content" requiredFlag="Y"></gs:label>&nbsp;<font size="2">( Đề nghị nội dung không nên vượt quá kích thước giấy A4 )</font>
 				<gs:inputfieldNoticeMsgLabel id="BSC_PROG002D0001E_content"></gs:inputfieldNoticeMsgLabel>
 				<br/>
 				<!--  

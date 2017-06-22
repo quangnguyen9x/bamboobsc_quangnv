@@ -185,7 +185,7 @@ function ${programId}_page_message() {
     			<br/>
     			<gs:textBox name="BSC_PROG002D0001Q_visId" id="BSC_PROG002D0001Q_visId" value="" width="200" maxlength="14"></gs:textBox>
 				<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG002D0001Q_visId'">
-    				Input Id. example: VIS20141114001
+    				Nhập ID. Mẫu: VIS20141114001
 				</div>
     		</td>
     		<td height="50px" width="50%"  align="left">
@@ -193,7 +193,7 @@ function ${programId}_page_message() {
     			<br/>
     			<gs:textBox name="BSC_PROG002D0001Q_title" id="BSC_PROG002D0001Q_title" value="" width="200" maxlength="100"></gs:textBox>
 				<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG002D0001Q_title'">
-    				Input title.
+    				Nhập tiêu đề.
 				</div>
     		</td>
     	</tr>
