@@ -89,7 +89,7 @@ function BSC_PROG002D0005Q_getKpiTree() {
 	getHtmlContentData('${kpiOid}');
 	</s:if>
 	*/
-	var firstMessage = 'First select a KPI-item on tree menu.';
+	var firstMessage = 'Chọn KPIs trong menu trước';
 	alertDialog(_getApplicationProgramNameById('${programId}'), firstMessage, function(){}, 'Y');
 	showFieldsNoticeMessageLabel('BSC_PROG002D0005Q_mainInfoTemp'+_gscore_inputfieldNoticeMsgLabelIdName, firstMessage);
 	
@@ -358,9 +358,9 @@ function ${programId}_page_message() {
    									<gs:inputfieldNoticeMsgLabel id="BSC_PROG002D0005Q_dataForOpt"></gs:inputfieldNoticeMsgLabel>
    								</td>
    								<td width="30%" align="left">
-   									<gs:select name="BSC_PROG002D0005Q_dataForOpt" dataSource="{ \"all\":\"All\", \"organization\":\"Organization\", \"employee\":\"Employee\" }" id="BSC_PROG002D0005Q_dataForOpt" onChange="BSC_PROG002D0005Q_setDataForValue();"></gs:select>
+   									<gs:select name="BSC_PROG002D0005Q_dataForOpt" dataSource="{ \"all\":\"Tất Cả\", \"organization\":\"Cơ Quan\", \"employee\":\"Cá Nhân\" }" id="BSC_PROG002D0005Q_dataForOpt" onChange="BSC_PROG002D0005Q_setDataForValue();"></gs:select>
 									<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG002D0005Q_dataForOpt'">
-					    				Select data type.
+					    				Lựa Chọn Kiểu Dữ Liệu.
 									</div>    									
    								</td>
    								<td width="20%" align="right">
@@ -371,7 +371,7 @@ function ${programId}_page_message() {
    								<td width="30%" align="left">
    									<gs:select name="BSC_PROG002D0005Q_frequencyOpt" dataSource="frequencyMap" id="BSC_PROG002D0005Q_frequencyOpt" onChange="BSC_PROG002D0005Q_clearContent();"></gs:select>
 									<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG002D0005Q_frequencyOpt'">
-					    				Select frequency.
+					    				Lựa Chọn Tần Xuất.
 									</div>     									
    								</td>   								
    							</tr>   						
@@ -384,7 +384,7 @@ function ${programId}_page_message() {
    								<td width="30%" align="left">
    									<gs:select name="BSC_PROG002D0005Q_organizationOid" dataSource="organizationMap" id="BSC_PROG002D0005Q_organizationOid" readonly="Y" onChange="BSC_PROG002D0005Q_clearContent();"></gs:select>
 									<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG002D0005Q_organizationOid'">
-					    				Select organization/department.
+					    				Chọn Cơ Quan/bộ phận.
 									</div>    									
    								</td>
    								<td width="20%" align="right">
@@ -395,7 +395,7 @@ function ${programId}_page_message() {
    								<td width="30%" align="left">
    									<gs:select name="BSC_PROG002D0005Q_employeeOid" dataSource="employeeMap" id="BSC_PROG002D0005Q_employeeOid" readonly="Y" onChange="BSC_PROG002D0005Q_clearContent();"></gs:select>
 									<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG002D0005Q_employeeOid'">
-					    				Select personal/Employee.
+					    				Chọn Cá Nhân/Nhân Viên.
 									</div>       									
    								</td>   								
    							</tr>
