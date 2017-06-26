@@ -204,10 +204,12 @@ public class KpiReportExcelCommand extends BaseChainCommandSupport implements Co
 			}
 		}
 		Row contentRow = sh.createRow(row++);
-		Cell contentCell2 = contentRow.createCell(6);
+		sh.addMergedRegion( new CellRangeAddress((row-1), (row-1), 5, 6) );	
+		Cell contentCell2 = contentRow.createCell(5);
 		contentCell2.setCellValue("Tổng điểm BSC");
 		contentCell2.setCellStyle(cellStyle);
-		sh.addMergedRegion( new CellRangeAddress((row-1), (row-1), 5, 6) );	
+		Cell contentCell2_1 = contentRow.createCell(6);
+		contentCell2_1.setCellStyle(cellStyle);	
 		Cell contentCell3 = contentRow.createCell(7);
 		contentCell3.setCellValue(sumBSC);
 		contentCell3.setCellStyle(cellStyle);
