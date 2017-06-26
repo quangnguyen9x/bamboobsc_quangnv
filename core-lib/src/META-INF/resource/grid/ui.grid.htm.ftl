@@ -7,8 +7,8 @@
   		<font size="2">${totalName}:&nbsp;<span id="gridQuery_pageOf_rowCount${id}"/></font>  	
   	</td>
   	<td width="10px" style="background: linear-gradient(to top, #f1eee5 , #fafafa);" align="center">&nbsp;</td>        
-    <td width="20px" style="background: linear-gradient(to top, #f1eee5 , #fafafa);" align="right"><a href="javascript:changeGridQueryToFirst${id}();"><img src="./icons/stock_first.png" border="0" alt="F" title="First page"/></a></td>
-    <td width="20px" style="background: linear-gradient(to top, #f1eee5 , #fafafa);" align="right"><a href="javascript:changeGridQueryToPrev${id}();"><img src="./icons/stock_left.png" border="0" alt="P" title="Previous"/></a></td>
+    <td width="20px" style="background: linear-gradient(to top, #f1eee5 , #fafafa);" align="right"><a href="javascript:changeGridQueryToFirst${id}();"><img src="./icons/stock_first.png" border="0" alt="F" title="Trang đầu"/></a></td>
+    <td width="20px" style="background: linear-gradient(to top, #f1eee5 , #fafafa);" align="right"><a href="javascript:changeGridQueryToPrev${id}();"><img src="./icons/stock_left.png" border="0" alt="P" title="Trang trước"/></a></td>
     <td width="200px" style="background: linear-gradient(to top, #f1eee5 , #fafafa);" align="center">
     <!-- pageOf.size -->
     <input type="hidden" name="gridQuery_pageOf_size${id}" id="gridQuery_pageOf_size${id}" value="1"/>
@@ -27,8 +27,8 @@
 			
     	&nbsp;/&nbsp;<span id="gridQuery_pageOf_size_show${id}"/>
     </td>    
-    <td width="20px" style="background: linear-gradient(to top, #f1eee5 , #fafafa);" align="left"><a href="javascript:changeGridQueryToNext${id}();"><img src="./icons/stock_right.png" border="0" alt="N" title="Next"/></a></td>
-    <td width="20px" style="background: linear-gradient(to top, #f1eee5 , #fafafa);" align="left"><a href="javascript:changeGridQueryToLast${id}();"><img src="./icons/stock_last.png" border="0" alt="L" title="Last page"/></a></td>
+    <td width="20px" style="background: linear-gradient(to top, #f1eee5 , #fafafa);" align="left"><a href="javascript:changeGridQueryToNext${id}();"><img src="./icons/stock_right.png" border="0" alt="N" title="Trang sau"/></a></td>
+    <td width="20px" style="background: linear-gradient(to top, #f1eee5 , #fafafa);" align="left"><a href="javascript:changeGridQueryToLast${id}();"><img src="./icons/stock_last.png" border="0" alt="L" title="Trang cuối"/></a></td>
     <td width="10px" style="background: linear-gradient(to top, #f1eee5 , #fafafa);" align="center">&nbsp;</td>
     <td width="200px" style="background: linear-gradient(to top, #f1eee5 , #fafafa);" align="center">
     	<font size="2">${rowSizeName}</font>

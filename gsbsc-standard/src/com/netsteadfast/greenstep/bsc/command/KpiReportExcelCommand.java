@@ -110,7 +110,7 @@ public class KpiReportExcelCommand extends BaseChainCommandSupport implements Co
 		BscReportSupportUtils.loadExpression(); // 2015-04-18 add
 		String fileName = SimpleUtils.getUUIDStr() + ".xlsx";
 		String fileFullPath = Constants.getWorkTmpDir() + "/" + fileName;	
-		int row = 24;
+		int row = 0;
 		if (context.get("pieCanvasToData") == null || context.get("barCanvasToData") == null) {
 			row = 0;
 		}
@@ -119,13 +119,6 @@ public class KpiReportExcelCommand extends BaseChainCommandSupport implements Co
 		
 		row += this.createHead(wb, sh, row, vision);
 		row = this.createMainBody(wb, sh, row, vision);
-		
-		row = row + 1; // 空一列
-		row = this.createDateRange(wb, sh, row, vision, context);
-		if (context.get("pieCanvasToData") != null && context.get("barCanvasToData") != null) {
-			this.putCharts(wb, sh, context);
-		}
-		this.putSignature(wb, sh, row+1, context);
 		
         FileOutputStream out = new FileOutputStream(fileFullPath);
         wb.write(out);
@@ -139,51 +132,13 @@ public class KpiReportExcelCommand extends BaseChainCommandSupport implements Co
 		return oid;
 	}
 	
-	private int putCharts(XSSFWorkbook wb, XSSFSheet sh, Context context) throws Exception {
-		String pieBase64Content = SimpleUtils.getPNGBase64Content( (String)context.get("pieCanvasToData") );
-		String barBase64Content = SimpleUtils.getPNGBase64Content( (String)context.get("barCanvasToData") );
-		BufferedImage pieImage = SimpleUtils.decodeToImage( pieBase64Content );
-		BufferedImage barImage = SimpleUtils.decodeToImage( barBase64Content );
-		ByteArrayOutputStream pieBos = new ByteArrayOutputStream();
-		ImageIO.write( pieImage, "png", pieBos );
-		pieBos.flush();
-		ByteArrayOutputStream barBos = new ByteArrayOutputStream();
-		ImageIO.write( barImage, "png", barBos );
-		barBos.flush();		
-		SimpleUtils.setCellPicture(wb, sh, pieBos.toByteArray(), 0, 0);		
-		SimpleUtils.setCellPicture(wb, sh, barBos.toByteArray(), 0, 6);		
-		return 25;
-	}
-	
-	private void putSignature(XSSFWorkbook wb, XSSFSheet sh, int row, Context context) throws Exception {
-		String uploadOid = (String)context.get("uploadSignatureOid");
-		if ( StringUtils.isBlank(uploadOid) ) {
-			return;
-		}
-		byte[] imageBytes = UploadSupportUtils.getDataBytes( uploadOid );
-		if ( null == imageBytes ) {
-			return;
-		}
-		SimpleUtils.setCellPicture(wb, sh, imageBytes, row, 0);
-	}
-	
 	private int createHead(XSSFWorkbook wb, XSSFSheet sh, int row, VisionVO vision) throws Exception {
 		Row headRow = sh.createRow(row);
-		headRow.setHeight( (short)700 );
-		
 		int cell=0;
-		
-		XSSFColor bgColor = new XSSFColor( SimpleUtils.getColorRGB4POIColor(vision.getBgColor()) );
-		XSSFColor fnColor = new XSSFColor( SimpleUtils.getColorRGB4POIColor(vision.getFontColor()) );
-		
 		XSSFCellStyle cellHeadStyle = wb.createCellStyle();
-		cellHeadStyle.setFillForegroundColor( bgColor );
-		cellHeadStyle.setFillPattern( FillPatternType.SOLID_FOREGROUND );		
-		
 		XSSFFont cellHeadFont = wb.createFont();
 		cellHeadFont.setBold(true);
-		cellHeadFont.setColor(fnColor);
-		cellHeadStyle.setFont(cellHeadFont);		
+		cellHeadStyle.setFont(cellHeadFont);
 		cellHeadStyle.setBorderBottom(BorderStyle.THIN);
 		cellHeadStyle.setBorderTop(BorderStyle.THIN);
 		cellHeadStyle.setBorderRight(BorderStyle.THIN);
@@ -192,735 +147,70 @@ public class KpiReportExcelCommand extends BaseChainCommandSupport implements Co
 		cellHeadStyle.setAlignment(HorizontalAlignment.CENTER);
 		cellHeadStyle.setWrapText(true);
 		
-		int cols = 12;
+		int cols = 8; 
+		String arrHeadText[] = {"ID", "KPI", "Quan Điểm", "Đơn Vị Tính", "Trọng Số", "Mục Tiêu", "Điểm Đạt", "Điểm BSC"};
 		for (int i=0; i<cols; i++) {
-			sh.setColumnWidth(i, 4000);
 			Cell headCell1 = headRow.createCell(cell++);	
-			headCell1.setCellValue( vision.getTitle() + "\nscore: " + BscReportSupportUtils.parse2(vision.getScore()) );
-			headCell1.setCellStyle(cellHeadStyle);						
-		}
-		
-		sh.addMergedRegion( new CellRangeAddress(row, row, 0, cols-1) );
-		
-		
-		
-		// ------------------------------------------------------------------------
-		bgColor = new XSSFColor( SimpleUtils.getColorRGB4POIColor(BscReportPropertyUtils.getBackgroundColor()) );
-		fnColor = new XSSFColor( SimpleUtils.getColorRGB4POIColor(BscReportPropertyUtils.getFontColor()) );
-		
-		cellHeadStyle = wb.createCellStyle();
-		cellHeadStyle.setFillForegroundColor( bgColor );
-		cellHeadStyle.setFillPattern( FillPatternType.SOLID_FOREGROUND );		
-		
-		cellHeadFont = wb.createFont();
-		cellHeadFont.setBold(true);
-		cellHeadFont.setColor(fnColor);
-		cellHeadStyle.setFont(cellHeadFont);		
-		cellHeadStyle.setBorderBottom(BorderStyle.THIN);
-		cellHeadStyle.setBorderTop(BorderStyle.THIN);
-		cellHeadStyle.setBorderRight(BorderStyle.THIN);
-		cellHeadStyle.setBorderLeft(BorderStyle.THIN);
-		cellHeadStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-		cellHeadStyle.setAlignment(HorizontalAlignment.CENTER);
-		cellHeadStyle.setWrapText(true);
-		
-		row++;
-		headRow = sh.createRow(row);
-		cell = 0;
-		int titleCols = 4;
-		for (int i=0; i<titleCols; i++) {
-			Cell headCell1 = headRow.createCell(cell++);	
-			headCell1.setCellValue( BscReportPropertyUtils.getPerspectiveTitle() );
-			headCell1.setCellStyle(cellHeadStyle);						
-		}
-		for (int i=0; i<titleCols; i++) {
-			Cell headCell1 = headRow.createCell(cell++);	
-			headCell1.setCellValue( BscReportPropertyUtils.getObjectiveTitle() );
-			headCell1.setCellStyle(cellHeadStyle);						
-		}
-		for (int i=0; i<titleCols; i++) {
-			Cell headCell1 = headRow.createCell(cell++);	
-			headCell1.setCellValue( BscReportPropertyUtils.getKpiTitle() );
-			headCell1.setCellStyle(cellHeadStyle);						
-		}
-		
-		sh.addMergedRegion( new CellRangeAddress(row, row, 0, 3) );
-		sh.addMergedRegion( new CellRangeAddress(row, row, 4, 7) );
-		sh.addMergedRegion( new CellRangeAddress(row, row, 8, 11) );
-		
-		// ------------------------------------------------------------------------
-				
-		return 2;
+			headCell1.setCellValue(arrHeadText[i]);
+			headCell1.setCellStyle(cellHeadStyle);
+			if(i>2) sh.autoSizeColumn(i);
+		}			
+		return 1;
 	}
 	
 	private int createMainBody(XSSFWorkbook wb, XSSFSheet sh, int row, VisionVO vision) throws Exception {
-		Map<String, String> managementMap = BscKpiCode.getManagementMap(false);
-		//Map<String, String> calculationMap = BscKpiCode.getCalculationMap(false);
-		int itemCols = 4;
-		int mrRow = row;	
-		for (int px=0; px<vision.getPerspectives().size(); px++) {
+		XSSFCellStyle cellStyle = wb.createCellStyle();
+		cellStyle.setBorderBottom(BorderStyle.THIN);
+		cellStyle.setBorderTop(BorderStyle.THIN);
+		cellStyle.setBorderRight(BorderStyle.THIN);
+		cellStyle.setBorderLeft(BorderStyle.THIN);
+		float sumBSC = 0;
+		for (int px=0; px<vision.getPerspectives().size(); px++) 
+		{
 			PerspectiveVO perspective = vision.getPerspectives().get(px);
-			
-			for (int ox=0; ox<perspective.getObjectives().size(); ox++) {
+			for (int ox=0; ox<perspective.getObjectives().size(); ox++) 
+			{
 				ObjectiveVO objective = perspective.getObjectives().get(ox);
-				
-				for (int kx=0; kx<objective.getKpis().size(); kx++) {
-					KpiVO kpi = objective.getKpis().get(kx);
-					
+				for (int kx=0; kx<objective.getKpis().size(); kx++) 
+				{
 					Row contentRow = sh.createRow(row++);
-					contentRow.setHeight((short)4000);					
-					
+					KpiVO kpi = objective.getKpis().get(kx);				
 					int cell = 0;
-					
-					for (int i=0; i<itemCols; i++) {
-						String content = this.getItemsContent(
-								perspective.getName(), 
-								perspective.getScore(), 
-								perspective.getWeight(), 
-								perspective.getTarget(), 
-								perspective.getMin());
-						XSSFCellStyle cellStyle = wb.createCellStyle();
-						cellStyle.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(perspective.getBgColor())) );
-						cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-						XSSFFont cellFont = wb.createFont();
-						cellFont.setBold(false);
-						cellFont.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(perspective.getFontColor())) );
-						cellStyle.setFont(cellFont);
-						cellStyle.setWrapText(true);
-						cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-						cellStyle.setBorderBottom(BorderStyle.THIN);
-						cellStyle.setBorderTop(BorderStyle.THIN);
-						cellStyle.setBorderRight(BorderStyle.THIN);
-						cellStyle.setBorderLeft(BorderStyle.THIN);
+					int cols = 8;
+					String arrContent[] = {kpi.getId(), kpi.getName(), perspective.getName(), kpi.getUnit(), kpi.getWeight().toString(), Float.toString(kpi.getTarget()), Float.toString(kpi.getScore()), Float.toString(kpi.getWeight().floatValue()*kpi.getScore()/100)};
+					for (int i=0; i<cols; i++) 
+					{
 						Cell contentCell1 = contentRow.createCell(cell++);
-						contentCell1.setCellValue( "\n" + content );
-						contentCell1.setCellStyle(cellStyle);	
-						
-						if (i==0 && ox==0) {
-							byte[] imgBytes = BscReportSupportUtils.getByteIconBase(
-									"PERSPECTIVES", 
-									perspective.getTarget(), 
-									perspective.getMin(), 
-									perspective.getScore(), 
-									"", 
-									"", 
-									0);
-							if (null != imgBytes) {
-								SimpleUtils.setCellPicture(wb, sh, imgBytes, contentCell1.getRowIndex(), contentCell1.getColumnIndex());
-							}									
-						}					
-						
-					}
-					for (int i=0; i<itemCols; i++) {
-						String content = this.getItemsContent(
-								objective.getName(), 
-								objective.getScore(), 
-								objective.getWeight(), 
-								objective.getTarget(), 
-								objective.getMin());						
-						XSSFCellStyle cellStyle = wb.createCellStyle();
-						cellStyle.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(objective.getBgColor())) );
-						cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-						XSSFFont cellFont = wb.createFont();
-						cellFont.setBold(false);
-						cellFont.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(objective.getFontColor())) );
-						cellStyle.setFont(cellFont);
-						cellStyle.setWrapText(true);
-						cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-						cellStyle.setBorderBottom(BorderStyle.THIN);
-						cellStyle.setBorderTop(BorderStyle.THIN);
-						cellStyle.setBorderRight(BorderStyle.THIN);
-						cellStyle.setBorderLeft(BorderStyle.THIN);
-						Cell contentCell1 = contentRow.createCell(cell++);
-						contentCell1.setCellValue( "\n" + content );
+						if(i==4)
+						{
+							Float content = Float.parseFloat(arrContent[i]);
+							contentCell1.setCellValue(BscReportSupportUtils.parse2(content));
+						}
+						else if(i==6 || i==7)
+						{
+							Float content = Float.parseFloat(arrContent[i]);
+							contentCell1.setCellValue(BscReportSupportUtils.parse(content));
+						}
+						else 
+						{
+							String content = arrContent[i];
+							contentCell1.setCellValue(content);
+						}
 						contentCell1.setCellStyle(cellStyle);
-						
-						if (i==0 && kx==0) {
-							byte[] imgBytes = BscReportSupportUtils.getByteIconBase(
-									"OBJECTIVES", 
-									objective.getTarget(), 
-									objective.getMin(), 
-									objective.getScore(), 
-									"", 
-									"", 
-									0);
-							if (null != imgBytes) {
-								SimpleUtils.setCellPicture(wb, sh, imgBytes, contentCell1.getRowIndex(), contentCell1.getColumnIndex());
-							}							
-						}	
-						
+						if(i<=2) sh.autoSizeColumn(i);
 					}
-					for (int i=0; i<itemCols; i++) {
-						//String content = this.getKpisContent(kpi, managementMap, calculationMap);
-						String content = this.getKpisContent(kpi, managementMap);
-						XSSFCellStyle cellStyle = wb.createCellStyle();
-						cellStyle.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(kpi.getBgColor())) );
-						cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-						XSSFFont cellFont = wb.createFont();
-						cellFont.setBold(false);
-						cellFont.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(kpi.getFontColor())) );
-						cellStyle.setFont(cellFont);
-						cellStyle.setWrapText(true);
-						cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-						cellStyle.setBorderBottom(BorderStyle.THIN);
-						cellStyle.setBorderTop(BorderStyle.THIN);
-						cellStyle.setBorderRight(BorderStyle.THIN);
-						cellStyle.setBorderLeft(BorderStyle.THIN);
-						Cell contentCell1 = contentRow.createCell(cell++);
-						contentCell1.setCellValue( "\n" + content );
-						contentCell1.setCellStyle(cellStyle);			
-						
-						if (i==0) {
-							byte[] imgBytes = BscReportSupportUtils.getByteIconBase(
-									"KPI", 
-									kpi.getTarget(), 
-									kpi.getMin(), 
-									kpi.getScore(), 
-									kpi.getCompareType(), 
-									kpi.getManagement(), 
-									kpi.getQuasiRange());
-							if (null != imgBytes) {
-								SimpleUtils.setCellPicture(wb, sh, imgBytes, contentCell1.getRowIndex(), contentCell1.getColumnIndex());
-							}								
-						}					
-						
-					}
-					
+					sumBSC = sumBSC + kpi.getWeight().floatValue()*kpi.getScore()/100;
 				}
-				
 			}
-			
 		}
-		
-		for (int px=0; px<vision.getPerspectives().size(); px++) {
-			PerspectiveVO perspective = vision.getPerspectives().get(px);
-			sh.addMergedRegion(new CellRangeAddress(mrRow, mrRow + perspective.getRow()-1, 0, 3));
-			
-			for (int ox=0; ox<perspective.getObjectives().size(); ox++) {
-				ObjectiveVO objective = perspective.getObjectives().get(ox);
-				sh.addMergedRegion(new CellRangeAddress(mrRow, mrRow + objective.getRow()-1, 4, 7));
-				
-				for (int kx=0; kx<objective.getKpis().size(); kx++) {
-					sh.addMergedRegion(new CellRangeAddress(mrRow+kx, mrRow+kx, 8, 11));
-				}
-				
-				mrRow += objective.getKpis().size();
-			}
-			
-		}
-		
+		Row contentRow = sh.createRow(row++);
+		Cell contentCell2 = contentRow.createCell(6);
+		contentCell2.setCellValue("Tổng điểm BSC");
+		contentCell2.setCellStyle(cellStyle);
+		sh.addMergedRegion( new CellRangeAddress((row-1), (row-1), 5, 6) );	
+		Cell contentCell3 = contentRow.createCell(7);
+		contentCell3.setCellValue(sumBSC);
+		contentCell3.setCellStyle(cellStyle);
 		return row++;
 	}
-	
-	private int createDateRange(XSSFWorkbook wb, XSSFSheet sh, int row, VisionVO vision, Context context) throws Exception {
-		String frequency = (String)context.get("frequency");
-		String startYearDate = StringUtils.defaultString( (String)context.get("startYearDate") ).trim();
-		String endYearDate = StringUtils.defaultString( (String)context.get("endYearDate") ).trim();
-		String startDate = StringUtils.defaultString( (String)context.get("startDate") ).trim();
-		String endDate = StringUtils.defaultString( (String)context.get("endDate") ).trim();
-		String date1 = startDate;
-		String date2 = endDate;		
-		if (BscMeasureDataFrequency.FREQUENCY_QUARTER.equals(frequency) 
-				|| BscMeasureDataFrequency.FREQUENCY_HALF_OF_YEAR.equals(frequency)
-				|| BscMeasureDataFrequency.FREQUENCY_YEAR.equals(frequency) ) {
-			date1 = startYearDate + "/01/01";
-			date2 = endYearDate + "/12/" + SimpleUtils.getMaxDayOfMonth(Integer.parseInt(endYearDate), 12);			
-		}						
-		Map<String, Object> headContentMap = new HashMap<String, Object>();
-		this.fillHeadContent(context, headContentMap);
-		
-		XSSFCellStyle cellStyleLabel = wb.createCellStyle();
-		cellStyleLabel.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(BscReportPropertyUtils.getBackgroundColor())) );
-		cellStyleLabel.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-		XSSFFont cellFontLabel = wb.createFont();
-		cellFontLabel.setBold(false);
-		cellFontLabel.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(BscReportPropertyUtils.getFontColor())) );
-		cellStyleLabel.setFont(cellFontLabel);
-		cellStyleLabel.setWrapText(true);
-		cellStyleLabel.setVerticalAlignment(VerticalAlignment.CENTER);
-		cellStyleLabel.setBorderBottom(BorderStyle.THIN);
-		cellStyleLabel.setBorderTop(BorderStyle.THIN);
-		cellStyleLabel.setBorderRight(BorderStyle.THIN);
-		cellStyleLabel.setBorderLeft(BorderStyle.THIN);
-		
-		int cols = 4 + vision.getPerspectives().get(0).getObjectives().get(0).getKpis().get(0).getDateRangeScores().size();
-		int cell = 0;
-		Row headRow = sh.createRow(row);
-		headRow.setHeight( (short)700 );
-		for (int i=0; i<cols; i++) {
-			String content = "Frequency: " + BscMeasureDataFrequency.getFrequencyMap(false).get(frequency) + 
-					" Date range: " + date1 + " ~ " + date2 + "\n" +
-					StringUtils.defaultString((String)headContentMap.get("headContent"));
-			Cell headCell1 = headRow.createCell(cell++);	
-			headCell1.setCellValue( content );
-			headCell1.setCellStyle(cellStyleLabel);						
-		}
-		
-		sh.addMergedRegion( new CellRangeAddress(row, row, 0, cols-1) );	
-		
-		row++;
-		
-		int drCols = 4;
-		int drRows = 2;
-		
-		
-		// =======================================================================================================
-		// Vision date range , 2017-06-07 add
-		// =======================================================================================================
-		cell = 0;
-		headRow = sh.createRow(row);
-		headRow.setHeight( (short)700 );
-		for (int i=0; i<cols; i++) {
-			Cell headCell1 = headRow.createCell(cell++);	
-			headCell1.setCellValue( "Vision date range score" );
-			headCell1.setCellStyle(cellStyleLabel);						
-		}
-		sh.addMergedRegion( new CellRangeAddress(row, row, 0, cols-1) );	
-		row++;
-		
-		for (int r=0; r<drRows; r++) {
-			Row contentRow = sh.createRow(row++);
-			contentRow.setHeight((short)400);		
-			
-			for (int c=0; c<drCols; c++) {							
-				XSSFCellStyle cellStyle = wb.createCellStyle();
-				cellStyle.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(vision.getBgColor())) );
-				cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-				XSSFFont cellFont = wb.createFont();
-				cellFont.setBold(false);
-				cellFont.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(vision.getFontColor())) );
-				cellStyle.setFont(cellFont);
-				cellStyle.setWrapText(true);
-				cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-				cellStyle.setBorderBottom(BorderStyle.THIN);
-				cellStyle.setBorderTop(BorderStyle.THIN);
-				cellStyle.setBorderRight(BorderStyle.THIN);
-				cellStyle.setBorderLeft(BorderStyle.THIN);
-				Cell contentCell1 = contentRow.createCell(c);
-				contentCell1.setCellValue( vision.getTitle() );
-				contentCell1.setCellStyle(cellStyle);
-				
-			}
-			
-			cell = 4;
-			if (r == 0) { // date
-				
-				for (int d=0; d<vision.getDateRangeScores().size(); d++) {
-					DateRangeScoreVO dateRangeScore = vision.getDateRangeScores().get(d);
-					XSSFCellStyle cellStyle = wb.createCellStyle();
-					cellStyle.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getBgColor())) );
-					cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-					XSSFFont cellFont = wb.createFont();
-					cellFont.setBold(false);
-					cellFont.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getFontColor())) );
-					cellStyle.setFont(cellFont);
-					cellStyle.setWrapText(true);
-					cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-					cellStyle.setBorderBottom(BorderStyle.THIN);
-					cellStyle.setBorderTop(BorderStyle.THIN);
-					cellStyle.setBorderRight(BorderStyle.THIN);
-					cellStyle.setBorderLeft(BorderStyle.THIN);
-					Cell contentCell1 = contentRow.createCell(cell++);
-					contentCell1.setCellValue( dateRangeScore.getDate() );
-					contentCell1.setCellStyle(cellStyle);								
-				}
-											
-			}
-			if (r == 1) { // score
-
-				for (int d=0; d<vision.getDateRangeScores().size(); d++) {
-					DateRangeScoreVO dateRangeScore = vision.getDateRangeScores().get(d);
-					XSSFCellStyle cellStyle = wb.createCellStyle();
-					cellStyle.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getBgColor())) );
-					cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-					XSSFFont cellFont = wb.createFont();
-					cellFont.setBold(false);
-					cellFont.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getFontColor())) );
-					cellStyle.setFont(cellFont);
-					cellStyle.setWrapText(true);
-					cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-					cellStyle.setBorderBottom(BorderStyle.THIN);
-					cellStyle.setBorderTop(BorderStyle.THIN);
-					cellStyle.setBorderRight(BorderStyle.THIN);
-					cellStyle.setBorderLeft(BorderStyle.THIN);
-					Cell contentCell1 = contentRow.createCell(cell++);
-					contentCell1.setCellValue( "      " + BscReportSupportUtils.parse2(dateRangeScore.getScore()) );
-					contentCell1.setCellStyle(cellStyle);		
-					
-				}
-				
-			}
-			
-		}
-		sh.addMergedRegion( new CellRangeAddress(row-2, row-1, 0, drCols-1) );	
-		
-		
-		// =======================================================================================================
-		// Perspectives date range , 2017-06-07 add
-		// =======================================================================================================
-		cell = 0;
-		headRow = sh.createRow(row);
-		headRow.setHeight( (short)700 );
-		for (int i=0; i<cols; i++) {
-			Cell headCell1 = headRow.createCell(cell++);	
-			headCell1.setCellValue( BscReportPropertyUtils.getPerspectiveTitle() + " date range score" );
-			headCell1.setCellStyle(cellStyleLabel);						
-		}
-		sh.addMergedRegion( new CellRangeAddress(row, row, 0, cols-1) );
-		row++;
-		
-		for (PerspectiveVO perspective : vision.getPerspectives()) {
-			cell = 0;
-			for (int r=0; r<drRows; r++) {
-				Row contentRow = sh.createRow(row++);
-				contentRow.setHeight((short)400);		
-				
-				for (int c=0; c<drCols; c++) {							
-					XSSFCellStyle cellStyle = wb.createCellStyle();
-					cellStyle.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(perspective.getBgColor())) );
-					cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-					XSSFFont cellFont = wb.createFont();
-					cellFont.setBold(false);
-					cellFont.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(perspective.getFontColor())) );
-					cellStyle.setFont(cellFont);
-					cellStyle.setWrapText(true);
-					cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-					cellStyle.setBorderBottom(BorderStyle.THIN);
-					cellStyle.setBorderTop(BorderStyle.THIN);
-					cellStyle.setBorderRight(BorderStyle.THIN);
-					cellStyle.setBorderLeft(BorderStyle.THIN);
-					Cell contentCell1 = contentRow.createCell(c);
-					contentCell1.setCellValue( perspective.getName() );
-					contentCell1.setCellStyle(cellStyle);
-					
-				}
-				
-				cell = 4;
-				if (r == 0) { // date
-					
-					for (int d=0; d<perspective.getDateRangeScores().size(); d++) {
-						DateRangeScoreVO dateRangeScore = perspective.getDateRangeScores().get(d);
-						XSSFCellStyle cellStyle = wb.createCellStyle();
-						cellStyle.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getBgColor())) );
-						cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-						XSSFFont cellFont = wb.createFont();
-						cellFont.setBold(false);
-						cellFont.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getFontColor())) );
-						cellStyle.setFont(cellFont);
-						cellStyle.setWrapText(true);
-						cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-						cellStyle.setBorderBottom(BorderStyle.THIN);
-						cellStyle.setBorderTop(BorderStyle.THIN);
-						cellStyle.setBorderRight(BorderStyle.THIN);
-						cellStyle.setBorderLeft(BorderStyle.THIN);
-						Cell contentCell1 = contentRow.createCell(cell++);
-						contentCell1.setCellValue( dateRangeScore.getDate() );
-						contentCell1.setCellStyle(cellStyle);								
-					}
-												
-				}
-				if (r == 1) { // score
-
-					for (int d=0; d<perspective.getDateRangeScores().size(); d++) {
-						DateRangeScoreVO dateRangeScore = perspective.getDateRangeScores().get(d);
-						XSSFCellStyle cellStyle = wb.createCellStyle();
-						cellStyle.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getBgColor())) );
-						cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-						XSSFFont cellFont = wb.createFont();
-						cellFont.setBold(false);
-						cellFont.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getFontColor())) );
-						cellStyle.setFont(cellFont);
-						cellStyle.setWrapText(true);
-						cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-						cellStyle.setBorderBottom(BorderStyle.THIN);
-						cellStyle.setBorderTop(BorderStyle.THIN);
-						cellStyle.setBorderRight(BorderStyle.THIN);
-						cellStyle.setBorderLeft(BorderStyle.THIN);
-						Cell contentCell1 = contentRow.createCell(cell++);
-						contentCell1.setCellValue( "      " + BscReportSupportUtils.parse2(dateRangeScore.getScore()) );
-						contentCell1.setCellStyle(cellStyle);		
-						
-					}
-					
-				}
-				
-			}
-			sh.addMergedRegion( new CellRangeAddress(row-2, row-1, 0, drCols-1) );	
-		}
-		
-		
-		// =======================================================================================================
-		// Strategy Objectives date range , 2017-06-07 add
-		// =======================================================================================================
-		cell = 0;
-		headRow = sh.createRow(row);
-		headRow.setHeight( (short)700 );
-		for (int i=0; i<cols; i++) {
-			Cell headCell1 = headRow.createCell(cell++);	
-			headCell1.setCellValue( BscReportPropertyUtils.getObjectiveTitle() + " date range score" );
-			headCell1.setCellStyle(cellStyleLabel);						
-		}
-		sh.addMergedRegion( new CellRangeAddress(row, row, 0, cols-1) );	
-		row++;		
-		
-		for (PerspectiveVO perspective : vision.getPerspectives()) {
-			for (ObjectiveVO objective : perspective.getObjectives()) {
-				cell = 0;
-				for (int r=0; r<drRows; r++) {
-					Row contentRow = sh.createRow(row++);
-					contentRow.setHeight((short)400);		
-					
-					for (int c=0; c<drCols; c++) {							
-						XSSFCellStyle cellStyle = wb.createCellStyle();
-						cellStyle.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(objective.getBgColor())) );
-						cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-						XSSFFont cellFont = wb.createFont();
-						cellFont.setBold(false);
-						cellFont.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(objective.getFontColor())) );
-						cellStyle.setFont(cellFont);
-						cellStyle.setWrapText(true);
-						cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-						cellStyle.setBorderBottom(BorderStyle.THIN);
-						cellStyle.setBorderTop(BorderStyle.THIN);
-						cellStyle.setBorderRight(BorderStyle.THIN);
-						cellStyle.setBorderLeft(BorderStyle.THIN);
-						Cell contentCell1 = contentRow.createCell(c);
-						contentCell1.setCellValue( objective.getName() );
-						contentCell1.setCellStyle(cellStyle);
-						
-					}
-					
-					cell = 4;
-					if (r == 0) { // date
-						
-						for (int d=0; d<objective.getDateRangeScores().size(); d++) {
-							DateRangeScoreVO dateRangeScore = objective.getDateRangeScores().get(d);
-							XSSFCellStyle cellStyle = wb.createCellStyle();
-							cellStyle.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getBgColor())) );
-							cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-							XSSFFont cellFont = wb.createFont();
-							cellFont.setBold(false);
-							cellFont.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getFontColor())) );
-							cellStyle.setFont(cellFont);
-							cellStyle.setWrapText(true);
-							cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-							cellStyle.setBorderBottom(BorderStyle.THIN);
-							cellStyle.setBorderTop(BorderStyle.THIN);
-							cellStyle.setBorderRight(BorderStyle.THIN);
-							cellStyle.setBorderLeft(BorderStyle.THIN);
-							Cell contentCell1 = contentRow.createCell(cell++);
-							contentCell1.setCellValue( dateRangeScore.getDate() );
-							contentCell1.setCellStyle(cellStyle);								
-						}
-													
-					}
-					if (r == 1) { // score
-
-						for (int d=0; d<objective.getDateRangeScores().size(); d++) {
-							DateRangeScoreVO dateRangeScore = objective.getDateRangeScores().get(d);
-							XSSFCellStyle cellStyle = wb.createCellStyle();
-							cellStyle.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getBgColor())) );
-							cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-							XSSFFont cellFont = wb.createFont();
-							cellFont.setBold(false);
-							cellFont.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getFontColor())) );
-							cellStyle.setFont(cellFont);
-							cellStyle.setWrapText(true);
-							cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-							cellStyle.setBorderBottom(BorderStyle.THIN);
-							cellStyle.setBorderTop(BorderStyle.THIN);
-							cellStyle.setBorderRight(BorderStyle.THIN);
-							cellStyle.setBorderLeft(BorderStyle.THIN);
-							Cell contentCell1 = contentRow.createCell(cell++);
-							contentCell1.setCellValue( "      " + BscReportSupportUtils.parse2(dateRangeScore.getScore()) );
-							contentCell1.setCellStyle(cellStyle);		
-							
-						}
-						
-					}
-					
-				}
-				sh.addMergedRegion( new CellRangeAddress(row-2, row-1, 0, drCols-1) );					
-			}
-		}
-		
-		
-		
-		// =======================================================================================================
-		// KPIs
-		// =======================================================================================================
-		cell = 0;
-		headRow = sh.createRow(row);
-		headRow.setHeight( (short)700 );
-		for (int i=0; i<cols; i++) {
-			Cell headCell1 = headRow.createCell(cell);	
-			headCell1.setCellValue( BscReportPropertyUtils.getKpiTitle() + " date range score" );
-			headCell1.setCellStyle(cellStyleLabel);						
-		}
-		sh.addMergedRegion( new CellRangeAddress(row, row, 0, cols-1) );	
-		row++;
-		
-		for (PerspectiveVO perspective : vision.getPerspectives()) {
-			for (ObjectiveVO objective : perspective.getObjectives()) {
-				for (KpiVO kpi : objective.getKpis()) {
-					cell = 0;
-					
-					for (int r=0; r<drRows; r++) {
-						Row contentRow = sh.createRow(row++);
-						contentRow.setHeight((short)400);		
-						
-						for (int c=0; c<drCols; c++) {							
-							XSSFCellStyle cellStyle = wb.createCellStyle();
-							cellStyle.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(kpi.getBgColor())) );
-							cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-							XSSFFont cellFont = wb.createFont();
-							cellFont.setBold(false);
-							cellFont.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(kpi.getFontColor())) );
-							cellStyle.setFont(cellFont);
-							cellStyle.setWrapText(true);
-							cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-							cellStyle.setBorderBottom(BorderStyle.THIN);
-							cellStyle.setBorderTop(BorderStyle.THIN);
-							cellStyle.setBorderRight(BorderStyle.THIN);
-							cellStyle.setBorderLeft(BorderStyle.THIN);
-							Cell contentCell1 = contentRow.createCell(c);
-							contentCell1.setCellValue( kpi.getName() );
-							contentCell1.setCellStyle(cellStyle);
-							
-						}
-						
-						cell = 4;
-						if (r == 0) { // date
-							
-							for (int d=0; d<kpi.getDateRangeScores().size(); d++) {
-								DateRangeScoreVO dateRangeScore = kpi.getDateRangeScores().get(d);
-								XSSFCellStyle cellStyle = wb.createCellStyle();
-								cellStyle.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getBgColor())) );
-								cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-								XSSFFont cellFont = wb.createFont();
-								cellFont.setBold(false);
-								cellFont.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getFontColor())) );
-								cellStyle.setFont(cellFont);
-								cellStyle.setWrapText(true);
-								cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-								cellStyle.setBorderBottom(BorderStyle.THIN);
-								cellStyle.setBorderTop(BorderStyle.THIN);
-								cellStyle.setBorderRight(BorderStyle.THIN);
-								cellStyle.setBorderLeft(BorderStyle.THIN);
-								Cell contentCell1 = contentRow.createCell(cell++);
-								contentCell1.setCellValue( dateRangeScore.getDate() );
-								contentCell1.setCellStyle(cellStyle);								
-							}
-														
-						}
-						if (r == 1) { // score
-
-							for (int d=0; d<kpi.getDateRangeScores().size(); d++) {
-								DateRangeScoreVO dateRangeScore = kpi.getDateRangeScores().get(d);
-								XSSFCellStyle cellStyle = wb.createCellStyle();
-								cellStyle.setFillForegroundColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getBgColor())) );
-								cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);	
-								XSSFFont cellFont = wb.createFont();
-								cellFont.setBold(false);
-								cellFont.setColor( new XSSFColor(SimpleUtils.getColorRGB4POIColor(dateRangeScore.getFontColor())) );
-								cellStyle.setFont(cellFont);
-								cellStyle.setWrapText(true);
-								cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-								cellStyle.setBorderBottom(BorderStyle.THIN);
-								cellStyle.setBorderTop(BorderStyle.THIN);
-								cellStyle.setBorderRight(BorderStyle.THIN);
-								cellStyle.setBorderLeft(BorderStyle.THIN);
-								Cell contentCell1 = contentRow.createCell(cell++);
-								contentCell1.setCellValue( "      " + BscReportSupportUtils.parse2(dateRangeScore.getScore()) );
-								contentCell1.setCellStyle(cellStyle);		
-								
-								byte[] imgBytes = BscReportSupportUtils.getByteIcon(kpi, dateRangeScore.getScore());
-								if (null != imgBytes) {
-									SimpleUtils.setCellPicture(wb, sh, imgBytes, contentCell1.getRowIndex(), contentCell1.getColumnIndex());
-								}
-								
-							}
-							
-						}
-						
-					}
-										
-					sh.addMergedRegion( new CellRangeAddress(row-2, row-1, 0, drCols-1) );
-										
-				}
-			}
-		}
-		
-		return row++;
-	}
-	
-	private void fillHeadContent(Context context, Map<String, Object> parameter) throws ServiceException, Exception {
-		String headContent = "";
-		String orgId = (String)context.get("orgId");
-		String empId = (String)context.get("empId");
-		String account = (String)context.get("account");
-		if (!BscConstants.MEASURE_DATA_ORGANIZATION_FULL.equals(orgId) && !StringUtils.isBlank(orgId) ) {
-			OrganizationVO organization = new OrganizationVO();
-			organization.setOrgId(orgId);
-			DefaultResult<OrganizationVO> result = this.organizationService.findByUK(organization);
-			if (result.getValue()!=null) {
-				organization = result.getValue();
-				headContent += "\nMeasure data for: " 
-						+ organization.getOrgId() + " - " + organization.getName();
-			}
-		}
-		if (!BscConstants.MEASURE_DATA_EMPLOYEE_FULL.equals(empId) 
-				&& !StringUtils.isBlank(empId) && !StringUtils.isBlank(account) ) {
-			EmployeeVO employee = new EmployeeVO();
-			employee.setEmpId(empId);
-			employee.setAccount(account);
-			DefaultResult<EmployeeVO> result = this.employeeService.findByUK(employee);
-			if (result.getValue()!=null) {
-				employee = result.getValue();
-				headContent += "\nMeasure data for: " 
-						+ employee.getEmpId() + " - " + employee.getFullName();
-				if (!StringUtils.isBlank(employee.getJobTitle())) {
-					headContent += " ( " + employee.getJobTitle() + " ) ";
-				}
-			}
-		}		
-		parameter.put("headContent", headContent);
-	}	
-	
-	private String getItemsContent(String name, float score, BigDecimal weight, float target, float min) {
-		String str = "";
-		str = name + "\n" + BscReportPropertyUtils.getScoreLabel() + " " + BscReportSupportUtils.parse2(score) + "\n" + BscReportPropertyUtils.getWeightLabel() + " " + weight.toString() + "%" + "\n" +
-				BscReportPropertyUtils.getTargetLabel() + " " + target + "\n" + BscReportPropertyUtils.getMinLabel() + " " + min;
-		return str;
-	}
-	
-	private String getItemsContent(String name, float score, BigDecimal weight, float max, float target, float min) {
-		String str = "";
-		str = name + "\n" + BscReportPropertyUtils.getScoreLabel() + " " + BscReportSupportUtils.parse2(score) + "\n" + BscReportPropertyUtils.getWeightLabel() + " " + weight.toString() + "%" + "\n" +
-				BscReportPropertyUtils.getMaxLabel() + " " + max + "\n" + BscReportPropertyUtils.getTargetLabel() + " " + target + "\n" + BscReportPropertyUtils.getMinLabel() + " " + min;
-		return str;
-	}	
-	
-	/*
-	private String getKpisContent(KpiVO kpi, Map<String, String> managementMap, Map<String, String> calculationMap) {
-		String str = this.getItemsContent(kpi.getName(), kpi.getScore(), kpi.getWeight(), kpi.getTarget(), kpi.getMin());
-		str += "\n" + "management: " + managementMap.get(kpi.getManagement()) + "\n" + 
-				"Calculation: " + calculationMap.get(kpi.getCal()) + "\n" + 
-				"Unit: " + kpi.getUnit() + "\n" + 
-				"Formula: " + kpi.getFormula().getName() + "\n" +
-				StringUtils.defaultString( kpi.getDescription() );
-		return str;
-	}
-	*/
-
-	private String getKpisContent(KpiVO kpi, Map<String, String> managementMap) throws Exception {
-		String str = this.getItemsContent(kpi.getName(), kpi.getScore(), kpi.getWeight(), kpi.getMax(), kpi.getTarget(), kpi.getMin());
-		str += "\n" + BscReportPropertyUtils.getManagementLabel() + " " + managementMap.get(kpi.getManagement()) + "\n" + 
-				BscReportPropertyUtils.getCalculationLabel() + " " + AggregationMethodUtils.getNameByAggrId(kpi.getCal()) + "\n" + 
-				BscReportPropertyUtils.getUnitLabel() + " " + kpi.getUnit() + "\n" + 
-				BscReportPropertyUtils.getFormulaLabel() + " " + kpi.getFormula().getName() + "\n" +
-				StringUtils.defaultString( kpi.getDescription() );
-		return str;
-	}	
-	
 }
