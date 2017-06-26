@@ -543,14 +543,14 @@ function ${programId}_page_message() {
 									<s:property value="getText('BSC_PROG003D0001Q_visionOid')"/>
 									<gs:select name="BSC_PROG003D0001Q_visionOid" dataSource="visionMap" id="BSC_PROG003D0001Q_visionOid"></gs:select>
 									<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG003D0001Q_visionOid'">
-					    				Select vision.
+					    				Lựa chọn tầm nhìn.
 									</div>  									
 						    		&nbsp;		    			
 					    																	
 									<s:property value="getText('BSC_PROG003D0001Q_frequency')"/>
 									<gs:select name="BSC_PROG003D0001Q_frequency" dataSource="frequencyMap" id="BSC_PROG003D0001Q_frequency" value="6" onChange="BSC_PROG003D0001Q_setFrequencyValue();" width="140"></gs:select>
 									<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG003D0001Q_frequency'">
-					    				Select frequency.
+					    				Lựa chọn tần xuất.
 									</div> 									
 								</td>											
 							</tr>	
@@ -562,14 +562,14 @@ function ${programId}_page_message() {
 							    	<input id="BSC_PROG003D0001Q_startYearDate" name="BSC_PROG003D0001Q_startYearDate" data-dojo-type="dojox.form.YearTextBox" 
 							    		maxlength="4"  type="text" data-dojo-props='style:"width: 80px;" ' />
 									<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG003D0001Q_startYearDate'">
-					    				Select start year.
+					    				Lựa chọn năm bắt đầu.
 									</div>							    		
 							    	&nbsp;	
 							    	<s:property value="getText('BSC_PROG003D0001Q_endYearDate')"/>
 							    	<input id="BSC_PROG003D0001Q_endYearDate" name="BSC_PROG003D0001Q_endYearDate" data-dojo-type="dojox.form.YearTextBox" 
 							    		maxlength="4"  type="text" data-dojo-props='style:"width: 80px;" ' />
 									<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG003D0001Q_endYearDate'">
-					    				Select end year.
+					    				Lựa chọn năm kết thúc.
 									</div>							    									    	
 							    	&nbsp;&nbsp;		
 									<s:property value="getText('BSC_PROG003D0001Q_startDate')"/>
@@ -577,7 +577,7 @@ function ${programId}_page_message() {
 										maxlength="10" 
 										constraints="{datePattern:'yyyy/MM/dd', selector:'date' }" style="width:120px;" readonly />
 									<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG003D0001Q_startDate'">
-					    				Select start date.
+					    				Lựa chọn ngày bắt đầu.
 									</div>											
 									&nbsp;						
 									<s:property value="getText('BSC_PROG003D0001Q_endDate')"/>
@@ -585,28 +585,28 @@ function ${programId}_page_message() {
 										maxlength="10" 
 										constraints="{datePattern:'yyyy/MM/dd', selector:'date' }" style="width:120px;" readonly />																	    									    	
 									<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG003D0001Q_endDate'">
-					    				Select end date.
+					    				Lựa chọn ngày kết thúc.
 									</div>							    			
 							    </td>	
 							</tr>
 							<tr valign="top">
 								<td width="100%" align="left" height="25px">							
 									<s:property value="getText('BSC_PROG003D0001Q_dataFor')"/>
-									<gs:select name="BSC_PROG003D0001Q_dataFor" dataSource="{ \"all\":\"All\", \"organization\":\"${action.getText('BSC_PROG003D0001Q_measureDataOrganizationOid')}\", \"employee\":\"${action.getText('BSC_PROG003D0001Q_measureDataEmployeeOid')}\" }" id="BSC_PROG003D0001Q_dataFor" onChange="BSC_PROG003D0001Q_setDataForValue();" width="140"></gs:select>
+									<gs:select name="BSC_PROG003D0001Q_dataFor" dataSource="{ \"all\":\"Tất Cả\", \"organization\":\"${action.getText('BSC_PROG003D0001Q_measureDataOrganizationOid')}\", \"employee\":\"${action.getText('BSC_PROG003D0001Q_measureDataEmployeeOid')}\" }" id="BSC_PROG003D0001Q_dataFor" onChange="BSC_PROG003D0001Q_setDataForValue();" width="140"></gs:select>
 									<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG003D0001Q_dataFor'">
-					    				Select measure data type.
+					    				Lựa chọn loại dữ liệu cho.
 									</div>										
 									&nbsp;&nbsp;
 									<s:property value="getText('BSC_PROG003D0001Q_measureDataOrganizationOid')"/>
 									<gs:filteringSelect name="BSC_PROG003D0001Q_measureDataOrganizationOid" dataSource="measureDataOrganizationMap" id="BSC_PROG003D0001Q_measureDataOrganizationOid" onChange="BSC_PROG003D0001Q_setMeasureDataOrgaValue();" readonly="Y" value="all"></gs:filteringSelect>
 									<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG003D0001Q_measureDataOrganizationOid'">
-					    				Select measure data organization/department.
+					    				Chọn dữ liệu cho Cơ Quan/Bộ Phận.
 									</div>									
 									&nbsp;&nbsp;
 									<s:property value="getText('BSC_PROG003D0001Q_measureDataEmployeeOid')"/>
 									<gs:filteringSelect name="BSC_PROG003D0001Q_measureDataEmployeeOid" dataSource="measureDataEmployeeMap" id="BSC_PROG003D0001Q_measureDataEmployeeOid" onChange="BSC_PROG003D0001Q_setMeasureDataEmplValue();" readonly="Y" value="all"></gs:filteringSelect>
 									<div data-dojo-type="dijit/Tooltip" data-dojo-props="connectId:'BSC_PROG003D0001Q_measureDataEmployeeOid'">
-					    				Select measure data personal/Employee.
+					    				Chọn dữ liệu cho Cá Nhân/Nhân Viên.
 									</div>									
 								</td>
 							</tr>																						
